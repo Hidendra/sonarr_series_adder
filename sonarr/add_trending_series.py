@@ -49,10 +49,12 @@ def main():
 
     # tvdbId
     sonarr_series = {show['tvdbId']: show for show in sonarr.get_series()}
-    print(sonarr_series)
 
-    trending = Trakt['shows'].trending(pagination=True)[:20]
-    print(len(trending))
+    sys.stderr.write('Loaded %d series from Sonarr\n' % len(sonarr_series))
+
+    trending = Trakt['shows'].trending(pagination=True)[:100]
+
+    sys.stderr.write('Inspecting %d trending shows from Trakt\n' % len(trending))
 
     # Trending Trakt tv shows
     for show in trending:
