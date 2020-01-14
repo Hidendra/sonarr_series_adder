@@ -17,6 +17,7 @@ def main():
     parser.add_argument('--client-key', help='TLS client cert key to connect to Sonarr with')
     parser.add_argument('--trakt-client-id', help='Trakt OAuth client ID')
     parser.add_argument('--trakt-client-secret', help='Trakt OAuth client secret')
+    parser.add_argument('--trakt-fetch-num', type=int, default=100, help='number of top trending shows to load from Trakt (default: 100)')
 
     args = parser.parse_args()
 
@@ -27,6 +28,7 @@ def main():
 
     api_url = 'https://%s/api' % args.host
     client_cert = (args.client_cert, args.client_key,)
+    trakt_fetch_num = args.trakt_fetch_num
 
     sonarr = SonarrAPI(api_url, args.api_key, client_cert)
 
@@ -52,7 +54,7 @@ def main():
 
     sys.stderr.write('Loaded %d series from Sonarr\n' % len(sonarr_series))
 
-    trending = Trakt['shows'].trending(pagination=True)[:100]
+    trending = Trakt['shows'].trending(pagination=True)[:trakt_fetch_num]
 
     sys.stderr.write('Inspecting %d trending shows from Trakt\n' % len(trending))
 
